@@ -1,7 +1,36 @@
 import { Link } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
+import Swal from 'sweetalert2'
 
 const AddUser = () => {
+    const handleAddUser = e => {
+        e.preventDefault();
+        const form = e.target;
+        const name = form.name.value;
+        const email = form.email.value;
+        const gender = form.gender.value;
+        const status = form.status.value;
+        const newUser = { name, email, gender, status }
+        fetch('http://localhost:5000/users', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(newUser)
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            console.log(data);
+            if(data.insertedId){
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'User Added Successfully',
+                    icon: 'success',
+                    confirmButtonText: 'Okay'
+                  })
+            }
+        })
+    }
     return (
         <div className="py-28 px-56">
             <Link to="/"><button className="btn"><IoMdArrowRoundBack className="mr-1" /> All Users</button></Link>
@@ -9,7 +38,7 @@ const AddUser = () => {
             <h2 className="text-center text-3xl font-semibold mt-10 mb-3">New User</h2>
             <p className="text-gray-400 text-center text-xl">Use the below form to create a new account</p>
             <form className="
-            w-2/3 mx-auto mt-8">
+            w-2/3 mx-auto mt-8" onSubmit={handleAddUser}>
                 <div className="form-control">
                     <label className="label">
                         <span className=" text-gray-400 label-text">Name</span>
@@ -33,7 +62,7 @@ const AddUser = () => {
                             <input
                                 id="male"
                                 type="radio"
-                                value="male"
+                                value="Male"
                                 name="gender"
                                 className="w-4 h-4   focus:accent-indigo-500 accent-indigo-500"
                                 required
@@ -45,7 +74,7 @@ const AddUser = () => {
                             <input
                                 id="female"
                                 type="radio"
-                                value="female"
+                                value="Female"
                                 name="gender"
                                 className="w-4 h-4  focus:accent-indigo-500 accent-indigo-500"
                                 required
@@ -65,7 +94,7 @@ const AddUser = () => {
                             <input
                                 id="active"
                                 type="radio"
-                                value="active"
+                                value="Active"
                                 name="status"
                                 className="w-4 h-4   focus:accent-indigo-500 accent-indigo-500"
                                 required
@@ -77,7 +106,7 @@ const AddUser = () => {
                             <input
                                 id="inactive"
                                 type="radio"
-                                value="inactive"
+                                value="Inactive"
                                 name="status"
                                 className="w-4 h-4  focus:accent-indigo-500 accent-indigo-500"
                                 required
