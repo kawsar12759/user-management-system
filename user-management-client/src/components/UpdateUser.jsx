@@ -1,9 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import Swal from 'sweetalert2'
 
-const AddUser = () => {
-    const handleAddUser = e => {
+
+const UpdateUser = () => {
+    const user = useLoaderData();
+    const handleUpdateUser = e => {
         e.preventDefault();
         const form = e.target;
         const name = form.name.value;
@@ -11,8 +13,8 @@ const AddUser = () => {
         const gender = form.gender.value;
         const status = form.status.value;
         const newUser = { name, email, gender, status }
-        fetch('https://user-management-server-qbzah4sa1-md-kawsar-hossains-projects.vercel.app/users', {
-            method: 'POST',
+        fetch(`https://user-management-server-qbzah4sa1-md-kawsar-hossains-projects.vercel.app/users/${user._id}`, {
+            method: 'PUT',
             headers: {
                 'content-type': 'application/json'
             },
@@ -21,10 +23,10 @@ const AddUser = () => {
             .then(res => res.json())
             .then(data => {
                 console.log(data);
-                if (data.insertedId) {
+                if (data.modifiedCount > 0) {
                     Swal.fire({
                         title: 'Success!',
-                        text: 'User Added Successfully',
+                        text: 'User Information Updated Successfully',
                         icon: 'success',
                         confirmButtonText: 'Okay'
                     })
@@ -35,22 +37,22 @@ const AddUser = () => {
         <div className="py-28 px-56">
             <Link to="/"><button className="btn"><IoMdArrowRoundBack className="mr-1" /> All Users</button></Link>
 
-            <h2 className="text-center text-3xl font-semibold mt-10 mb-3">New User</h2>
-            <p className="text-gray-400 text-center text-xl">Use the below form to create a new account</p>
+            <h2 className="text-center text-3xl font-semibold mt-10 mb-3">Update User</h2>
+            <p className="text-gray-400 text-center text-xl">Use the below form to update user account</p>
             <form className="
-            w-2/3 mx-auto mt-8" onSubmit={handleAddUser}>
+            w-2/3 mx-auto mt-8" onSubmit={handleUpdateUser}>
                 <div className="form-control">
                     <label className="label">
                         <span className=" text-gray-400 label-text">Name</span>
                     </label>
-                    <input type="text" placeholder="Enter Your Name"
+                    <input type="text" placeholder="Enter Your Name" defaultValue={user.name}
                         name="name" className="input input-bordered" required />
                 </div>
                 <div className="form-control">
                     <label className="label ">
                         <span className="label-text text-gray-400">Email</span>
                     </label>
-                    <input type="email" placeholder="Enter Your Email" name="email" className="input input-bordered" required />
+                    <input type="email" placeholder="Enter Your Email" defaultValue={user.email} name="email" className="input input-bordered" required />
                 </div>
                 <div className="form-control mt-3">
 
@@ -64,6 +66,7 @@ const AddUser = () => {
                                 type="radio"
                                 value="Male"
                                 name="gender"
+                                defaultChecked={user.gender === "Male"}
                                 className="w-4 h-4   focus:accent-indigo-500 accent-indigo-500"
                                 required
                             />
@@ -76,6 +79,7 @@ const AddUser = () => {
                                 type="radio"
                                 value="Female"
                                 name="gender"
+                                defaultChecked={user.gender === "Female"}
                                 className="w-4 h-4  focus:accent-indigo-500 accent-indigo-500"
                                 required
                             />
@@ -96,6 +100,7 @@ const AddUser = () => {
                                 type="radio"
                                 value="Active"
                                 name="status"
+                                defaultChecked={user.status === "Active"}
                                 className="w-4 h-4   focus:accent-indigo-500 accent-indigo-500"
                                 required
                             />
@@ -108,6 +113,7 @@ const AddUser = () => {
                                 type="radio"
                                 value="Inactive"
                                 name="status"
+                                defaultChecked={user.status === "Inactive"}
                                 className="w-4 h-4  focus:accent-indigo-500 accent-indigo-500"
                                 required
                             />
@@ -117,11 +123,11 @@ const AddUser = () => {
                     </div>
                 </div>
                 <div className="form-control mt-6">
-                    <button className="btn bg-indigo-500 text-white  text-lg font-medium hover:bg-indigo-700 border-none ">Add User</button>
+                    <button className="btn bg-indigo-500 text-white  text-lg font-medium hover:bg-indigo-700 border-none">Save</button>
                 </div>
             </form>
         </div>
     );
 };
 
-export default AddUser;
+export default UpdateUser;

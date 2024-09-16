@@ -8,21 +8,27 @@ import {
 import './index.css'
 import Home from './components/Home.jsx';
 import AddUser from './components/AddUser.jsx';
+import UpdateUser from './components/UpdateUser.jsx';
 
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App></App>,
-    children:[
+    children: [
       {
-        path:"/",
-        element:<Home></Home>,
-        loader:()=>fetch('http://localhost:5000/users')
+        path: "/",
+        element: <Home></Home>,
+        loader: () => fetch('https://user-management-server-qbzah4sa1-md-kawsar-hossains-projects.vercel.app/users')
       },
       {
-        path:"/adduser",
-        element:<AddUser></AddUser>
+        path: "/adduser",
+        element: <AddUser></AddUser>
+      },
+      {
+        path: "/updateuser/:id",
+        element: <UpdateUser></UpdateUser>,
+        loader: ({ params }) => fetch(`https://user-management-server-qbzah4sa1-md-kawsar-hossains-projects.vercel.app/users/${params.id}`)
       }
     ]
   },

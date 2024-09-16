@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 const Home = () => {
     const loadedUsers = useLoaderData();
-    const [users,setUsers] = useState(loadedUsers);
+    const [users, setUsers] = useState(loadedUsers);
     let count = 1;
     const handleDeleteUser = id => {
 
@@ -21,7 +21,7 @@ const Home = () => {
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`http://localhost:5000/users/${id}`, {
+                fetch(`https://user-management-server-qbzah4sa1-md-kawsar-hossains-projects.vercel.app/users/${id}`, {
                     method: 'DELETE'
                 })
                     .then(res => res.json())
@@ -44,11 +44,11 @@ const Home = () => {
         <div className="py-28 px-56">
             <Link to="/adduser"><button className="btn"><FaUser className="mr-1" /> Add User</button></Link>
 
-            <div className="overflow-x-auto mt-14">
+            <div className="overflow-x-auto mt-14 w-3/4 mx-auto">
                 <table className="table">
                     {/* head */}
                     <thead>
-                        <tr className="bg-zinc-700 text-white text-center">
+                        <tr className="bg-zinc-700 text-lg  text-white text-center">
                             <th>ID</th>
                             <th>Name</th>
                             <th>@Email</th>
@@ -68,7 +68,7 @@ const Home = () => {
                                     <td>{user.email}</td>
                                     <td>{user.gender}</td>
                                     <td>{user.status}</td>
-                                    <td className="text-indigo-500"><button className="btn text-indigo-500 mr-5"><FaPencilAlt /></button>
+                                    <td className="text-indigo-500"><Link to={`/updateuser/${user._id}`}><button className="btn text-indigo-500 mr-5"><FaPencilAlt /></button></Link>
                                         <button className="btn text-indigo-500" onClick={() => handleDeleteUser(user._id)}><ImCross /></button>
                                     </td>
                                 </tr>
